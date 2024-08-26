@@ -15,8 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return $products = Product::all();
-        return view('products.index');
+         $products = Product::all();
+        return view('products.index',compact('products'));
     }
 
     /**
@@ -66,7 +66,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.edit',compact('product'));
     }
 
     /**
@@ -78,7 +79,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->title = $request->title;
+        $product->price = $request->price;
+        $product->discount = $request->discount;
+        $product->description = $request->description;
+        $product->photo = $request->photo;
+        $product->save();
+        return redirect('/products');
     }
 
     /**
