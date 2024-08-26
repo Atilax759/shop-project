@@ -12,21 +12,37 @@
 <div class="">
     <form action="{{route('products.store')}}" method="post">
         @csrf
-        <div>
+        <h1 class="text-center mt-5">Create New Product</h1>
+        <div class="container offset-5 mt-5">
             <div class="">
-                <input name="title" placeholder="Name" type="text">
+                <input name="title" placeholder="Title" type="text">
+                <div class="">
+                    <small class="text-danger">@error('title') {{$message}} @enderror</small>
+                </div>
             </div>
             <div class="">
                 <input name="price" placeholder="Price" type="text">
+                <div class="">
+                    <small class="text-danger">@error('price') {{$message}} @enderror</small>
+                </div>
             </div>
             <div class="">
                 <input name="discount" placeholder="Discount" type="text">
+                <div class="">
+                    <small class="text-danger">@error('discount') {{$message}} @enderror</small>
+                </div>
             </div>
             <div class="">
                 <input name="description" placeholder="Description" type="text">
+                <div class="">
+                    <small class="text-danger">@error('description') {{$message}} @enderror</small>
+                </div>
             </div>
             <div class="">
-                <input name="photo" placeholder="Photo" type="file">-
+                <input name="photo" placeholder="Photo" type="file">
+                <div class="">
+                    <small class="text-danger">@error('photo') {{$message}} @enderror</small>
+                </div>
             </div>
             <button type="submit">save</button>
         </div>
