@@ -32,10 +32,12 @@
                 <td>{{$product->description}}</td>
                 <td>{{$product->photo}}</td>
                 <td>
-                    <a href="{{route('products.edit',$product)}}">edit</a>
-                    <form action="">
+
+                    <form method="post" action="{{route('products.destroy',$product)}}">
+
+                    <a class="btn btn-info" style="color:white" href="{{route('products.edit',$product)}}">edit</a>
                         @csrf
-                        <button type="submit">delete</button>
+                        @method('DELETE')                        <button class="btn btn-danger" type="submit">delete</button>
                     </form>
                 </td>
 

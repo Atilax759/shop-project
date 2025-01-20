@@ -55,7 +55,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -97,6 +97,15 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product=Product::findOrFail($id);
+        $product->delete();
+        return redirect('/products');
+    }
+
+    public function view()
+    {
+        $products = Product::paginate(1);
+        return view('welcome',compact('products'));
     }
 }
+

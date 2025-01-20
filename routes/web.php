@@ -13,8 +13,16 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProductController::class, 'view']);
 
-Route::resource('products', ProductController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+Route::group(['middleware' => 'admin'], function () {
+    Route::prefix('/' )->group(function () {
+        //مسیر های حفاظت شده
+        Route::resource('products', ProductController::class);
+    });
+});
