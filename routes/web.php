@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 */
 
 Route::get('/', [ProductController::class, 'view']);
+Route::get('/about', [ProductController::class, 'about']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -21,7 +22,7 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 Route::group(['middleware' => 'admin'], function () {
-    Route::prefix('/' )->group(function () {
+    Route::prefix('/admin' )->group(function () {
         //مسیر های حفاظت شده
         Route::resource('products', ProductController::class);
     });

@@ -5,107 +5,96 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-         $products = Product::all();
+        $products = Product::paginate(16);
         return view('products.index',compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(ProductRequest $request)
     {
+        $uploadFile=$request->file('photo');
+
+        $filename=time().$uploadFile->getClientOriginalName();
+        Storage::disk('local')->putFileAs(
+            'public/photos',$uploadFile,$filename
+        );
         $product = new Product();
         $product->title = $request->title;
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->description = $request->description;
-        $product->photo = $request->photo;
+        $product->photo = $filename;
         $product->save();
-        return redirect('/products');
+        return redirect('/admin/products');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         $product = Product::findOrFail($id);
         return view('products.edit',compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
+
         $product = Product::findOrFail($id);
         $product->title = $request->title;
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->description = $request->description;
-        $product->photo = $request->photo;
+        if ($request->hasFile('photo'))
+        {
+            $uploadFile=$request->file('photo');
+
+            $filename=time().$uploadFile->getClientOriginalName();
+            Storage::disk('local')->putFileAs(
+                'public/photos',$uploadFile,$filename
+            );
+            $product->photo = $filename;
+        }
+
         $product->save();
-        return redirect('/products');
+        return redirect('/admin/products');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         $product=Product::findOrFail($id);
         $product->delete();
-        return redirect('/products');
+        return redirect('/admin/products');
     }
 
     public function view()
     {
-        $products = Product::paginate(1);
+        $products = Product::paginate(16);
         return view('welcome',compact('products'));
+    }
+
+    public function about()
+    {
+        return view('about');
     }
 }
 
